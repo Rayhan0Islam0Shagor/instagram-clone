@@ -9,10 +9,11 @@
 /coverage
 
 # next.js
+/.next/
 /out/
 
 # production
-# /build
+/build
 
 # misc
 .DS_Store
@@ -31,3 +32,6 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# Local Netlify folder
+.netlify
