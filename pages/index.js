@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <div className="h-screen overflow-y-scroll bg-gray-50 scrollbar-hide">
       <Head>
-        <title>Clone of Instagram</title>
+        <title>Instagram 2.0</title>
         <link rel="icon" href="https://www.instagram.com/favicon.ico" />
       </Head>
 
