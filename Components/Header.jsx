@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import {
   SearchIcon,
   UserGroupIcon,
@@ -16,6 +17,12 @@ const Header = () => {
   const { data: session } = useSession();
   const router = useRouter();
 
+  const handleProfile = () => {
+    if (session) {
+      router.push(`profile/${session.user.username}`);
+    }
+  };
+
   const [open, setOpen] = useRecoilState(modalState);
 
   const handleClick = () => {
@@ -27,7 +34,7 @@ const Header = () => {
       <section className="flex items-center justify-between max-w-6xl mx-5 lg:mx-auto">
         <aside
           onClick={handleClick}
-          className="relative hidden w-24 h-16 cursor-pointer lg:inline-grid"
+          className="relative hidden w-24 h-16 py-2 cursor-pointer lg:inline-grid"
         >
           <Image
             src="/assets/Instagram_logo.svg"
@@ -37,7 +44,7 @@ const Header = () => {
         </aside>
         <aside
           onClick={handleClick}
-          className="relative flex-shrink-0 block w-10 h-10 cursor-pointer lg:hidden"
+          className="relative flex-shrink-0 block w-10 h-10 py-2 cursor-pointer lg:hidden"
         >
           <Image
             src="/assets/insta-icon.webp"
@@ -83,6 +90,7 @@ const Header = () => {
                 className="object-cover h-10 my-3 transition-all duration-200 ease-out rounded-full cursor-pointer sm:my-0 hover:scale-95"
                 loading="lazy"
                 alt="user"
+                onClick={handleProfile}
               />
             </>
           ) : (

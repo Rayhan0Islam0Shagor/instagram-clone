@@ -19,36 +19,37 @@ const Modal = () => {
   const { data: session } = useSession();
 
   const filePickerRef = useRef(null);
-  const captionRef = useRef(null);
 
   const [open, setOpen] = useRecoilState(modalState);
 
   const [selectedFile, setSelectedFile] = useState(null);
+  const [caption, setCaption] = useState('');
   const [loading, setLoading] = useState(false);
 
   const uploadPost = async (e) => {
+    if (caption.trim() === '') return;
+    if (selectedFile === null) return alert('Please select a file to upload');
+
     if (loading) return;
 
     setLoading(true);
 
     // TODO 1. create a post and add to firestore 'posts' collection
+    // TODO 2. get the post id for the created post
+    // TODO 3. upload the image to firestore storage with the post id
+    // TODO 4. get a download url from fb storage and update the original post with image
 
     // collection ref
     const docRef = await addDoc(collection(db, 'posts'), {
       username: session.user.username,
       fullname: session.user.name,
-      caption: captionRef.current.value,
+      email: session.user.email,
+      caption: caption,
       avatar: session.user.image,
       timestamp: serverTimestamp(),
     });
 
-    // TODO 2. get the post id for the created post
-
-    // TODO 3. upload the image to firestore storage with the post id
-
     const imageRef = ref(storage, `posts/${docRef.id}/image`);
-
-    // TODO 4. get a download url from fb storage and update the original post with image
 
     await uploadString(imageRef, selectedFile, 'data_url').then(
       async (Snapshot) => {
@@ -63,6 +64,7 @@ const Modal = () => {
     setOpen(false);
     setLoading(false);
     setSelectedFile(null);
+    setCaption('');
   };
 
   const addImageToPost = (e) => {
@@ -156,7 +158,8 @@ const Modal = () => {
 
                   <div className="mt-3">
                     <input
-                      ref={captionRef}
+                      required
+                      onChange={(e) => setCaption(e.target.value)}
                       type="text"
                       className="w-full text-center border-none focus:ring-0"
                       placeholder="Enter a caption..."
@@ -167,8 +170,9 @@ const Modal = () => {
                 <div className="mt-5sm:mt-6">
                   <button
                     onClick={uploadPost}
+                    disabled={selectedFile === null && caption.trim() === ''}
                     type="button"
-                    className="inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white bg-red-600 border border-transparent rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:bg-gray-300"
+                    className="inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white bg-red-600 border border-transparent rounded-md shadow-sm focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:bg-gray-300"
                   >
                     {loading ? 'uploading post' : 'Upload Post'}
                   </button>

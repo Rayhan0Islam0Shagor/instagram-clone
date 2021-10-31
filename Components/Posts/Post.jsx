@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
+import { Menu } from '@headlessui/react';
 import 'emoji-mart/css/emoji-mart.css';
 import { Picker } from 'emoji-mart';
 import {
@@ -24,8 +25,9 @@ import {
 } from '@firebase/firestore';
 import { db } from '../../config/firebaseConfig';
 import Moment from 'react-moment';
+import DropDown from '../DropDown/DropDown';
 
-const Post = ({ id, timestamp, image, avatar, name, caption }) => {
+const Post = ({ id, userMail, timestamp, image, avatar, name, caption }) => {
   const commentFieldRef = useRef(null);
   const { data: session } = useSession();
   const [comments, setComments] = useState([]);
@@ -124,15 +126,34 @@ const Post = ({ id, timestamp, image, avatar, name, caption }) => {
           src={avatar}
           alt={name}
         />
-
         <div className="flex-1">
-          <p className="font-bold cursor-pointer ">{name}</p>
+          <p className="font-bold cursor-pointer">{name}</p>
           <Moment className="text-xs" fromNow>
             {timestamp}
           </Moment>
         </div>
 
-        <DotsHorizontalIcon className="w-5 h-5 rounded-lg cursor-pointer focus:bg-gray-300 focus:animate-pulse " />
+        {userMail.map((mail,i) => {
+          if (mail === session?.user?.email) {
+            return (
+              <Menu
+                key={i}
+                as="div"
+                className="relative inline-block text-left"
+              >
+                <div>
+                  <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                    <DotsHorizontalIcon className="w-5 h-5 rounded-lg cursor-pointer focus:bg-gray-300 focus:animate-pulse " />
+                  </Menu.Button>
+                </div>
+
+                <DropDown id={id} />
+              </Menu>
+            );
+          } else {
+            return <> </>;
+          }
+        })}
       </div>
 
       <img className="object-cover w-full" src={image} alt={caption} />
@@ -167,13 +188,15 @@ const Post = ({ id, timestamp, image, avatar, name, caption }) => {
       </p>
 
       {session && (
-        <form className="flex items-center p-4">
+        <form className="relative flex items-center p-4">
           <EmojiHappyIcon
             onClick={triggerPicker}
             className="cursor-pointer h-7 animate-bounce"
           />
 
-          {emojiPicker}
+          <div className="absolute bottom-0 left-0 mb-[65px]">
+            {emojiPicker}
+          </div>
 
           <input
             type="text"
@@ -186,9 +209,9 @@ const Post = ({ id, timestamp, image, avatar, name, caption }) => {
 
           <button
             type="submit"
-            disabled={!comment.trim()}
+            disabled={comment.trim() === ''}
             onClick={sendComment}
-            className="px-3 py-1 font-semibold text-white bg-blue-600 rounded-full disabled:bg-gray-200 disabled:text-gray-600"
+            className="px-3 py-1 font-semibold text-white bg-blue-600 rounded-full disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-600"
           >
             Post
           </button>

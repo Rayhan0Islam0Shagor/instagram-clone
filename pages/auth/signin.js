@@ -23,7 +23,7 @@ const Signin = ({ providers }) => {
         />
 
         <p className="italic font-xs">
-          This sis not a real APP, It is built for learning purpose.
+          This site not a real APP, It is built for learning purpose.
         </p>
       </section>
 

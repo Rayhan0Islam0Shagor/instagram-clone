@@ -6,6 +6,11 @@ import { db } from '../../config/firebaseConfig';
 const Posts = () => {
   const [posts, setPosts] = useState([]);
 
+
+  let userMail = [];
+  const postEmail = posts.map((post) => userMail.push(post.data().email));
+
+
   useEffect(
     () =>
       onSnapshot(
@@ -29,6 +34,7 @@ const Posts = () => {
             name={post.data().username}
             caption={post.data().caption}
             timestamp={post.data()?.timestamp?.toDate()}
+            userMail={userMail}
           />
         );
       })}
