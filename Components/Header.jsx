@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import Link from 'next/link';
+import { Menu } from '@headlessui/react';
 import {
   SearchIcon,
   UserGroupIcon,
@@ -12,6 +12,7 @@ import { useSession, signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import { modalState } from '../atoms/modalAtom';
+import HeaderModal from './HeaderModal';
 
 const Header = () => {
   const { data: session } = useSession();
@@ -30,7 +31,7 @@ const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b shadow">
+    <header className="sticky top-0 z-50 py-2 bg-white border-b shadow md:py-0">
       <section className="flex items-center justify-between max-w-6xl mx-5 lg:mx-auto">
         <aside
           onClick={handleClick}
@@ -66,9 +67,18 @@ const Header = () => {
           </div>
         </aside>
 
-        <aside className="flex items-center justify-end space-x-4">
+        <aside className="flex items-center justify-end space-x-4 ">
           <HomeIcon onClick={handleClick} className="navBtns" />
-          <MenuIcon className="w-10 h-6 cursor-pointer md:hidden" />
+
+          <Menu as="div" className="relative inline-block text-left md:hidden">
+            <div>
+              <Menu.Button className="inline-flex justify-center w-full px-2 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                <MenuIcon className="w-10 h-6 cursor-pointer md:hidden" />
+              </Menu.Button>
+            </div>
+
+            <HeaderModal />
+          </Menu>
 
           {session ? (
             <>
@@ -96,7 +106,7 @@ const Header = () => {
           ) : (
             <button
               onClick={signIn}
-              className="px-3 py-1 text-sm font-semibold text-white bg-blue-600 rounded-full animate-pulse"
+              className="hidden px-3 py-1 text-sm font-semibold text-white bg-blue-600 rounded-full md:inline-flex animate-pulse"
             >
               sign in
             </button>
