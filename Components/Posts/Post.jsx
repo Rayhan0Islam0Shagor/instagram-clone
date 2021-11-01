@@ -11,7 +11,10 @@ import {
   PaperAirplaneIcon,
 } from '@heroicons/react/outline';
 import { useSession } from 'next-auth/react';
-import { HeartIcon as HeartIconFiller } from '@heroicons/react/solid';
+import {
+  HeartIcon as HeartIconFiller,
+  BookmarkIcon as BookmarkFiller,
+} from '@heroicons/react/solid';
 import {
   query,
   onSnapshot,
@@ -27,22 +30,26 @@ import { db } from '../../config/firebaseConfig';
 import Moment from 'react-moment';
 import DropDown from '../DropDown/DropDown';
 
-const Post = ({ id, userMail, timestamp, image, avatar, name, caption }) => {
+const Post = ({ id, value, timestamp, image, avatar, name, caption }) => {
   const commentFieldRef = useRef(null);
   const { data: session } = useSession();
+
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState('');
-  const [emojiPickerState, SetEmojiPicker] = useState(false);
 
   const [likes, setLikes] = useState([]);
   const [hasLiked, setHasLiked] = useState(false);
-  const [isEditing, setEditing] = useState(false);
 
+  const [saved, setSaved] = useState([]);
+  const [hasSaved, setHasSaved] = useState(false);
+
+  // emoji
+  const [emojiPickerState, SetEmojiPicker] = useState(false);
+  const [isEditing, setEditing] = useState(false);
   function triggerPicker(event) {
     event.preventDefault();
     SetEmojiPicker(!emojiPickerState);
   }
-
   let emojiPicker;
   if (emojiPickerState) {
     emojiPicker = (
@@ -62,21 +69,7 @@ const Post = ({ id, userMail, timestamp, image, avatar, name, caption }) => {
     commentFieldRef.current.focus();
   }
 
-  useEffect(
-    () =>
-      onSnapshot(
-        query(
-          collection(db, 'posts', id, 'comments'),
-          orderBy('timestamp', 'desc')
-        ),
-        (snapshot) => {
-          setComments(snapshot.docs);
-        }
-      ),
-
-    [db, id]
-  );
-
+  // get liked post
   useEffect(
     () =>
       onSnapshot(collection(db, 'posts', id, 'likes'), (snapshot) => {
@@ -93,6 +86,40 @@ const Post = ({ id, userMail, timestamp, image, avatar, name, caption }) => {
     [likes]
   );
 
+  // get saved post
+  useEffect(
+    () =>
+      onSnapshot(collection(db, 'posts', id, 'save'), (snapshot) => {
+        setSaved(snapshot.docs);
+      }),
+    [db, id]
+  );
+
+  useEffect(
+    () =>
+      setHasSaved(
+        saved.findIndex((save) => save.id === session?.user?.uid) !== -1
+      ),
+    [saved]
+  );
+
+  // get comments
+  useEffect(
+    () =>
+      onSnapshot(
+        query(
+          collection(db, 'posts', id, 'comments'),
+          orderBy('timestamp', 'desc')
+        ),
+        (snapshot) => {
+          setComments(snapshot.docs);
+        }
+      ),
+
+    [db, id]
+  );
+
+  // post like
   const likePost = async () => {
     if (hasLiked) {
       await deleteDoc(doc(db, 'posts', id, 'likes', session?.user?.uid));
@@ -103,6 +130,18 @@ const Post = ({ id, userMail, timestamp, image, avatar, name, caption }) => {
     }
   };
 
+  // post save
+  const savedPost = async () => {
+    if (hasSaved) {
+      await deleteDoc(doc(db, 'posts', id, 'save', session?.user?.uid));
+    } else {
+      await setDoc(doc(db, 'posts', id, 'save', session.user.uid), {
+        username: session.user.username,
+      });
+    }
+  };
+
+  // post comment
   const sendComment = async (e) => {
     e.preventDefault();
 
@@ -133,27 +172,19 @@ const Post = ({ id, userMail, timestamp, image, avatar, name, caption }) => {
           </Moment>
         </div>
 
-        {userMail.map((mail,i) => {
-          if (mail === session?.user?.email) {
-            return (
-              <Menu
-                key={i}
-                as="div"
-                className="relative inline-block text-left"
-              >
-                <div>
-                  <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                    <DotsHorizontalIcon className="w-5 h-5 rounded-lg cursor-pointer focus:bg-gray-300 focus:animate-pulse " />
-                  </Menu.Button>
-                </div>
+        {value ? (
+          <Menu as="div" className="relative inline-block text-left">
+            <div>
+              <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                <DotsHorizontalIcon className="w-5 h-5 rounded-lg cursor-pointer focus:bg-gray-300 focus:animate-pulse " />
+              </Menu.Button>
+            </div>
 
-                <DropDown id={id} />
-              </Menu>
-            );
-          } else {
-            return <> </>;
-          }
-        })}
+            <DropDown id={id} />
+          </Menu>
+        ) : (
+          <> </>
+        )}
       </div>
 
       <img className="object-cover w-full" src={image} alt={caption} />
@@ -174,7 +205,11 @@ const Post = ({ id, userMail, timestamp, image, avatar, name, caption }) => {
             <PaperAirplaneIcon className="btn" />
           </div>
 
-          <BookmarkIcon className="btn" />
+          {hasSaved ? (
+            <BookmarkFiller onClick={savedPost} className="text-red-600 btn" />
+          ) : (
+            <BookmarkIcon onClick={savedPost} className="btn" />
+          )}
         </div>
       )}
 

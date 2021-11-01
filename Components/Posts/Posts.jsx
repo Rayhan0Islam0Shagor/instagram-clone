@@ -1,15 +1,31 @@
 import { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
 import Post from './Post';
 import { collection, onSnapshot, orderBy, query } from '@firebase/firestore';
 import { db } from '../../config/firebaseConfig';
 
 const Posts = () => {
+  const { data: session } = useSession();
   const [posts, setPosts] = useState([]);
 
-
+  let postMail = [];
   let userMail = [];
-  const postEmail = posts.map((post) => userMail.push(post.data().email));
 
+  posts.map((post) => {
+    postMail.push(post.data().email);
+  });
+
+  postMail.map((mail) => {
+    if (mail === session?.user.email) {
+      userMail.push(mail);
+    }
+  });
+
+  const defaultEmail = 'a@gmail.com';
+
+  const filteredMail = (userMail[0] || defaultEmail) === session?.user.email;
+
+  console.log('Post', postMail, 'usermail', userMail, 'filter', filteredMail);
 
   useEffect(
     () =>
@@ -34,7 +50,7 @@ const Posts = () => {
             name={post.data().username}
             caption={post.data().caption}
             timestamp={post.data()?.timestamp?.toDate()}
-            userMail={userMail}
+            value={filteredMail}
           />
         );
       })}
