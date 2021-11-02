@@ -11,21 +11,21 @@ const Profile = () => {
         <section className="p-0 mt-5 md:p-2">
           <MiniProfile />
           <div className="mt-6 ml-0 md:ml-10">
-            <h1 className="font-bold text-gray-900">
+            <h1 className="font-bold text-gray-900 dark:text-gray-100">
               Username:{' '}
-              <span className="font-semibold text-gray-700">
+              <span className="font-semibold text-gray-700 dark:text-gray-400 ">
                 @{session?.user?.username}
               </span>
             </h1>
-            <h1 className="font-bold text-gray-900">
+            <h1 className="font-bold text-gray-900 dark:text-gray-100">
               Name:{' '}
-              <span className="font-semibold text-gray-700">
+              <span className="font-semibold text-gray-700 dark:text-gray-400">
                 {session?.user?.name}
               </span>
             </h1>
-            <h1 className="font-bold text-gray-900">
+            <h1 className="font-bold text-gray-900 dark:text-gray-100">
               Mail:{' '}
-              <span className="font-semibold text-gray-700">
+              <span className="font-semibold text-gray-700 dark:text-gray-400">
                 {session?.user?.email}
               </span>
             </h1>

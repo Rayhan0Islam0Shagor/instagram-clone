@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { Menu } from '@headlessui/react';
+import { useRecoilState } from 'recoil';
 import {
   SearchIcon,
   UserGroupIcon,
@@ -10,12 +11,13 @@ import {
 import { PlusCircleIcon, HomeIcon } from '@heroicons/react/solid';
 import { useSession, signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { useRecoilState } from 'recoil';
 import { modalState } from '../atoms/modalAtom';
 import HeaderModal from './HeaderModal';
+import ThemeSwitcher from './switch/ThemeSwitcher';
 
 const Header = () => {
   const { data: session } = useSession();
+
   const router = useRouter();
 
   const handleProfile = () => {
@@ -31,7 +33,7 @@ const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 py-2 bg-white border-b shadow md:py-0">
+    <header className="sticky top-0 z-50 py-2 bg-white border-b shadow dark:bg-gray-800 dark:border-blue-200 md:py-0">
       <section className="flex items-center justify-between max-w-6xl mx-5 lg:mx-auto">
         <aside
           onClick={handleClick}
@@ -41,6 +43,8 @@ const Header = () => {
             src="/assets/Instagram_logo.svg"
             layout="fill"
             objectFit="contain"
+            className="dark:filter-white"
+            alt="Instagram logo"
           />
         </aside>
         <aside
@@ -57,20 +61,25 @@ const Header = () => {
         <aside className="hidden max-w-xs sm:block">
           <div className="relative flex items-center p-3 rounded-md">
             <div className="absolute inset-y-0 flex items-center pl-3 pointer-events-none">
-              <SearchIcon className="w-5 h-5 text-gray-500" />
+              <SearchIcon className="w-5 h-5 text-gray-500 dark:text-gray-100" />
             </div>
             <input
               type="text"
-              className="block w-full pl-10 border-gray-300 rounded-md bg-gray-50 sm:text-sm border-gray focus:ring-black focus:border-black"
+              className="block w-full pl-10 border-gray-300 rounded-md dark:text-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-700 sm:text-sm border-gray focus:ring-black dark:focus:ring-white focus:border-black dark:focus:border-gray-200 dark:placeholder-gray-100"
               placeholder="search..."
             />
           </div>
         </aside>
 
         <aside className="flex items-center justify-end space-x-4 ">
+          <ThemeSwitcher />
+
           <HomeIcon onClick={handleClick} className="navBtns" />
 
-          <Menu as="div" className="relative inline-block text-left md:hidden">
+          <Menu
+            as="div"
+            className="relative inline-block text-left md:hidden dark:bg-gray-800 dark:text-gray-100"
+          >
             <div>
               <Menu.Button className="inline-flex justify-center w-full px-2 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
                 <MenuIcon className="w-10 h-6 cursor-pointer md:hidden" />
@@ -93,7 +102,7 @@ const Header = () => {
                 className="navBtns"
               />
               <UserGroupIcon className="navBtns" />
-              <HeartIcon className="text-red-700 navBtns" />
+              <HeartIcon className="dark:text-red-500 navBtns" />
 
               <img
                 src={session.user.image}
@@ -106,7 +115,7 @@ const Header = () => {
           ) : (
             <button
               onClick={signIn}
-              className="hidden px-3 py-1 text-sm font-semibold text-white bg-blue-600 rounded-full md:inline-flex animate-pulse"
+              className="hidden px-3 py-1 text-sm font-semibold text-white bg-blue-600 rounded-full md:inline-flex animate-pulse hover:outline-none"
             >
               sign in
             </button>

@@ -12,6 +12,12 @@ const MiniProfile = () => {
     }
   }, [session]);
 
+  const handleProfile = () => {
+    if (session) {
+      router.push(`profile/${session.user.username}`);
+    }
+  };
+
   return (
     <div>
       {session ? (
@@ -23,10 +29,15 @@ const MiniProfile = () => {
           />
 
           <div className="flex-1 mx-4">
-            <h2 className="font-bold cursor-pointer">
+            <h2
+              onClick={handleProfile}
+              className="font-bold cursor-pointer dark:text-gray-100"
+            >
               {session.user?.username}
             </h2>
-            <h3 className="text-sm text-gray-400">Welcome to Instagram</h3>
+            <h3 className="text-sm text-gray-400 dark:text-gray-300">
+              Welcome to Instagram
+            </h3>
           </div>
 
           <button

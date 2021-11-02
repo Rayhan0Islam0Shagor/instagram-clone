@@ -30,7 +30,7 @@ const ProfileFeed = () => {
       {filterPost.length > 0 ? (
         <>
           <div className="h-full mt-5 md:mt-16">
-            <p className="text-2xl font-bold text-center text-gray-700">
+            <p className="text-2xl font-bold text-center text-gray-700 dark:text-gray-400">
               You have {filterPost.length}{' '}
               {filterPost.length > 1 ? 'posts' : 'post'}
             </p>

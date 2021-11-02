@@ -1,6 +1,6 @@
 import { Fragment, useRef, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { Snapshot, useRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { modalState } from '../../atoms/modalAtom';
 import { CameraIcon, XIcon } from '@heroicons/react/outline';
 
@@ -14,6 +14,7 @@ import {
 } from '@firebase/firestore';
 import { useSession } from 'next-auth/react';
 import { ref, getDownloadURL, uploadString } from '@firebase/storage';
+import { ThemeState } from '../../atoms/ThemeAtom';
 
 const Modal = () => {
   const { data: session } = useSession();
@@ -21,6 +22,7 @@ const Modal = () => {
   const filePickerRef = useRef(null);
 
   const [open, setOpen] = useRecoilState(modalState);
+  const [theme] = useRecoilState(ThemeState);
 
   const [selectedFile, setSelectedFile] = useState(null);
   const [caption, setCaption] = useState('');
@@ -95,7 +97,7 @@ const Modal = () => {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Dialog.Overlay className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" />
+            <Dialog.Overlay className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75 " />
           </Transition.Child>
 
           <span
@@ -130,7 +132,7 @@ const Modal = () => {
                 ) : (
                   <div
                     onClick={() => filePickerRef.current.click()}
-                    className="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full cursor-pointer"
+                    className="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full cursor-pointer "
                   >
                     <CameraIcon
                       className="w-6 h-6 text-red-500"

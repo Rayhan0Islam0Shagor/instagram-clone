@@ -19,7 +19,7 @@ const Stories = () => {
   }, []);
 
   return (
-    <div className="flex p-6 mt-8 space-x-2 overflow-x-scroll bg-white border-gray-200 rounded-sm scrollbar-thumb-black scrollbar-thin">
+    <div className="flex p-6 mt-8 space-x-2 overflow-x-scroll bg-white border-gray-200 rounded-sm scrollbar-thumb-gray-800 dark:scrollbar-thumb-gray-100 scrollbar-thin dark:bg-gray-800 dark:text-gray-50">
       {session && (
         <Story avatar={session.user.image} username={session.user.username} />
       )}

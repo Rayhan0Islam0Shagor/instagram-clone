@@ -158,8 +158,8 @@ const Post = ({ id, value, timestamp, image, avatar, name, caption }) => {
   );
 
   return (
-    <div className="bg-white my-7 border-rounded-sm">
-      <div className="flex items-center p-5">
+    <div className="bg-white my-7 border-rounded-sm dark:bg-gray-800 dark:text-gray-100">
+      <div className="flex items-center p-5 dark:bg-gray-900">
         <img
           className="object-contain w-12 h-12 p-1 mr-3 border rounded-full cursor-pointer"
           src={avatar}
@@ -190,12 +190,12 @@ const Post = ({ id, value, timestamp, image, avatar, name, caption }) => {
       <img className="object-cover w-full" src={image} alt={caption} />
 
       {session && (
-        <div className="flex justify-between px-4 pt-4">
+        <div className="flex justify-between px-4 pt-4 dark:bg-gray-900">
           <div className="flex space-x-4">
             {hasLiked ? (
               <HeartIconFiller
                 onClick={likePost}
-                className="text-red-600 btn"
+                className="text-red-600 dark:text-red-600 btn"
               />
             ) : (
               <HeartIcon onClick={likePost} className="btn" />
@@ -216,14 +216,17 @@ const Post = ({ id, value, timestamp, image, avatar, name, caption }) => {
           </div>
 
           {hasSaved ? (
-            <BookmarkFiller onClick={savedPost} className="text-red-600 btn" />
+            <BookmarkFiller
+              onClick={savedPost}
+              className="text-red-600 dark:text-red-600 btn"
+            />
           ) : (
             <BookmarkIcon onClick={savedPost} className="btn" />
           )}
         </div>
       )}
 
-      <p className="p-5 truncate">
+      <p className="p-5 truncate dark:bg-gray-900">
         {likes.length > 0 && (
           <span className="mb-1 font-bold">
             {likes.length} {likes.length > 1 ? 'likes' : 'like'}
@@ -233,7 +236,7 @@ const Post = ({ id, value, timestamp, image, avatar, name, caption }) => {
       </p>
 
       {session && (
-        <form className="relative flex items-center p-4">
+        <form className="relative flex items-center p-4 dark:bg-gray-900">
           <EmojiHappyIcon
             onClick={triggerPicker}
             className="cursor-pointer h-7 animate-bounce"
@@ -249,7 +252,7 @@ const Post = ({ id, value, timestamp, image, avatar, name, caption }) => {
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             placeholder="Add a comment..."
-            className="flex-1 mx-1 border-none shadow-sm outline-none focus:ring-0 "
+            className="flex-1 mx-1 text-gray-500 border-none shadow-sm outline-none dark:text-gray-100 dark:bg-gray-700 dark:border-gray-900 focus:ring-0 dark:placeholder-gray-100"
           />
 
           <button
@@ -264,7 +267,7 @@ const Post = ({ id, value, timestamp, image, avatar, name, caption }) => {
       )}
 
       {comments.length > 0 && (
-        <div className="h-20 ml-10 overflow-y-scroll scrollbar-thumb-black scrollbar-thin">
+        <div className="h-20 pt-5 pb-2 pl-5 overflow-y-scroll scrollbar-thumb-black dark:scrollbar-thumb-gray-100 scrollbar-thin dark:bg-gray-900">
           {comments.map((comment) => {
             return (
               <div
@@ -276,8 +279,8 @@ const Post = ({ id, value, timestamp, image, avatar, name, caption }) => {
                   src={comment.data().avatar}
                   alt={comment.comment}
                 />
-                <p className="flex-1 text-sm font-semibold text-gray-500">
-                  <span className="font-bold text-black cursor-pointer">
+                <p className="flex-1 text-sm font-semibold text-gray-400 dark:text-gray-300">
+                  <span className="font-bold text-gray-800 cursor-pointer dark:text-gray-50">
                     {comment.data().username}
                   </span>{' '}
                   {comment.data().comment}
