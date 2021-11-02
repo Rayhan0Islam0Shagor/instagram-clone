@@ -69,6 +69,17 @@ const Post = ({ id, value, timestamp, image, avatar, name, caption }) => {
     commentFieldRef.current.focus();
   }
 
+  // post like
+  const likePost = async () => {
+    if (hasLiked) {
+      await deleteDoc(doc(db, 'posts', id, 'likes', session?.user?.uid));
+    } else {
+      await setDoc(doc(db, 'posts', id, 'likes', session.user.uid), {
+        username: session.user.username,
+      });
+    }
+  };
+
   // get liked post
   useEffect(
     () =>
@@ -85,6 +96,17 @@ const Post = ({ id, value, timestamp, image, avatar, name, caption }) => {
       ),
     [likes]
   );
+
+  // post save
+  const savedPost = async () => {
+    if (hasSaved) {
+      await deleteDoc(doc(db, 'posts', id, 'save', session?.user?.uid));
+    } else {
+      await setDoc(doc(db, 'posts', id, 'save', session.user.uid), {
+        username: session.user.username,
+      });
+    }
+  };
 
   // get saved post
   useEffect(
@@ -103,44 +125,6 @@ const Post = ({ id, value, timestamp, image, avatar, name, caption }) => {
     [saved]
   );
 
-  // get comments
-  useEffect(
-    () =>
-      onSnapshot(
-        query(
-          collection(db, 'posts', id, 'comments'),
-          orderBy('timestamp', 'desc')
-        ),
-        (snapshot) => {
-          setComments(snapshot.docs);
-        }
-      ),
-
-    [db, id]
-  );
-
-  // post like
-  const likePost = async () => {
-    if (hasLiked) {
-      await deleteDoc(doc(db, 'posts', id, 'likes', session?.user?.uid));
-    } else {
-      await setDoc(doc(db, 'posts', id, 'likes', session.user.uid), {
-        username: session.user.username,
-      });
-    }
-  };
-
-  // post save
-  const savedPost = async () => {
-    if (hasSaved) {
-      await deleteDoc(doc(db, 'posts', id, 'save', session?.user?.uid));
-    } else {
-      await setDoc(doc(db, 'posts', id, 'save', session.user.uid), {
-        username: session.user.username,
-      });
-    }
-  };
-
   // post comment
   const sendComment = async (e) => {
     e.preventDefault();
@@ -156,6 +140,22 @@ const Post = ({ id, value, timestamp, image, avatar, name, caption }) => {
       timestamp: serverTimestamp(),
     });
   };
+
+  // get comments
+  useEffect(
+    () =>
+      onSnapshot(
+        query(
+          collection(db, 'posts', id, 'comments'),
+          orderBy('timestamp', 'desc')
+        ),
+        (snapshot) => {
+          setComments(snapshot.docs);
+        }
+      ),
+
+    [db, id]
+  );
 
   return (
     <div className="bg-white my-7 border-rounded-sm">
@@ -201,7 +201,17 @@ const Post = ({ id, value, timestamp, image, avatar, name, caption }) => {
               <HeartIcon onClick={likePost} className="btn" />
             )}
 
-            <ChatIcon onClick={toggleEditing} className="btn" />
+            <div className="relative btn">
+              <ChatIcon onClick={toggleEditing} className="btn" />
+              {comments.length > 0 ? (
+                <div className="absolute flex items-center justify-center w-5 h-5 text-xs text-white bg-red-500 rounded-full -top-1 -right-1 animate-pulse">
+                  {comments.length}
+                </div>
+              ) : (
+                <> </>
+              )}
+            </div>
+
             <PaperAirplaneIcon className="btn" />
           </div>
 

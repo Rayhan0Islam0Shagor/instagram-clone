@@ -43,10 +43,32 @@ export default function HeaderModal() {
       >
         <Menu.Items className="absolute right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="px-1 py-1 ">
+            {session && (
+              <Menu.Item>
+                <div className="flex items-center w-full px-2 py-2 text-sm font-semibold text-gray-900 rounded-md cursor-pointer hover:scale-95 group">
+                  <img
+                    src={session.user.image}
+                    className="object-cover h-10 my-3 mr-2 transition-all duration-200 ease-out rounded-full cursor-pointer md:hidden sm:my-0 hover:scale-95"
+                    loading="lazy"
+                    alt="user"
+                    onClick={handleProfile}
+                  />
+                  <div className="text-left">
+                    <p class="font-bold text-gray-700">
+                      @{session.user.username}
+                    </p>
+                    <p class="text-xs text-gray-500 ml-1">
+                      welcome to instagram
+                    </p>
+                  </div>
+                </div>
+              </Menu.Item>
+            )}
+
             <Menu.Item>
               <button
                 onClick={handleClick}
-                className="flex items-center w-full px-2 py-2 text-sm font-semibold text-gray-900 rounded-md hover:scale-95 bg-violet-500 group"
+                className="flex items-center w-full px-2 py-2 text-sm font-semibold text-gray-900 rounded-md hover:scale-95 group"
               >
                 <HomeIcon className="mr-2 btn" aria-hidden="true" />
                 Home
@@ -56,7 +78,7 @@ export default function HeaderModal() {
             {session ? (
               <>
                 <Menu.Item>
-                  <button className="flex items-center w-full px-2 py-2 text-sm font-semibold text-gray-900 rounded-md hover:scale-95 bg-violet-500 group">
+                  <button className="flex items-center w-full px-2 py-2 text-sm font-semibold text-gray-900 rounded-md hover:scale-95 group">
                     <span className="relative h-6 transition-all duration-150 ease-in-out cursor-pointer md:inline-flex hover:scale-125">
                       <PaperAirplaneIcon
                         className="h-6 mr-2 transition-all duration-150 ease-in-out rotate-45 cursor-pointer md:inline-flex hover:scale-125"
@@ -73,7 +95,7 @@ export default function HeaderModal() {
                 <Menu.Item>
                   <button
                     onClick={() => setOpen(!open)}
-                    className="flex items-center w-full px-2 py-2 text-sm font-semibold text-gray-900 rounded-md hover:scale-95 bg-violet-500 group"
+                    className="flex items-center w-full px-2 py-2 text-sm font-semibold text-gray-900 rounded-md hover:scale-95 group"
                   >
                     <PlusCircleIcon className="mr-2 btn" aria-hidden="true" />
                     Add a post
@@ -81,14 +103,14 @@ export default function HeaderModal() {
                 </Menu.Item>
 
                 <Menu.Item>
-                  <button className="flex items-center w-full px-2 py-2 text-sm font-semibold text-gray-900 rounded-md hover:scale-95 bg-violet-500 group">
+                  <button className="flex items-center w-full px-2 py-2 text-sm font-semibold text-gray-900 rounded-md hover:scale-95 group">
                     <UserGroupIcon className="mr-2 btn" aria-hidden="true" />
                     People
                   </button>
                 </Menu.Item>
 
                 <Menu.Item>
-                  <button className="flex items-center w-full px-2 py-2 text-sm font-semibold text-gray-900 rounded-md hover:scale-95 bg-violet-500 group">
+                  <button className="flex items-center w-full px-2 py-2 text-sm font-semibold text-gray-900 rounded-md hover:scale-95 group">
                     <HeartIcon
                       className="mr-2 text-red-700 btn"
                       aria-hidden="true"

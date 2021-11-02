@@ -97,7 +97,7 @@ const Header = () => {
 
               <img
                 src={session.user.image}
-                className="object-cover h-10 my-3 transition-all duration-200 ease-out rounded-full cursor-pointer sm:my-0 hover:scale-95"
+                className="hidden object-cover h-10 my-3 transition-all duration-200 ease-out rounded-full cursor-pointer md:inline-flex sm:my-0 hover:scale-95"
                 loading="lazy"
                 alt="user"
                 onClick={handleProfile}

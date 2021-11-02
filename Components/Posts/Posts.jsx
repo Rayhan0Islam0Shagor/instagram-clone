@@ -25,7 +25,7 @@ const Posts = () => {
 
   const filteredMail = (userMail[0] || defaultEmail) === session?.user.email;
 
-  console.log('Post', postMail, 'usermail', userMail, 'filter', filteredMail);
+  // console.log('Post', postMail, 'usermail', userMail, 'filter', filteredMail);
 
   useEffect(
     () =>
