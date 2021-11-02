@@ -6,7 +6,7 @@ import { ThemeState } from '../../atoms/ThemeAtom';
 export default function ThemeSwitcher() {
   const [enabled, setEnabled] = useState(false);
   const [isDark, setIsDark] = useRecoilState(ThemeState);
-  const [theme, setTheme] = useState(isDark ? 'dark' : 'light');
+  const [theme, setTheme] = useState(isDark);
 
   setIsDark(theme);
 
