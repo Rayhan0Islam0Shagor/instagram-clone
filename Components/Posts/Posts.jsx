@@ -8,25 +8,6 @@ const Posts = () => {
   const { data: session } = useSession();
   const [posts, setPosts] = useState([]);
 
-  let postMail = [];
-  let userMail = [];
-
-  posts.map((post) => {
-    postMail.push(post.data().email);
-  });
-
-  postMail.map((mail) => {
-    if (mail === session?.user.email) {
-      userMail.push(mail);
-    }
-  });
-
-  const defaultEmail = 'a@gmail.com';
-
-  const filteredMail = (userMail[0] || defaultEmail) === session?.user.email;
-
-  // console.log('Post', postMail, 'usermail', userMail, 'filter', filteredMail);
-
   useEffect(
     () =>
       onSnapshot(
@@ -50,7 +31,7 @@ const Posts = () => {
             name={post.data().username}
             caption={post.data().caption}
             timestamp={post.data()?.timestamp?.toDate()}
-            value={filteredMail}
+            email={post.data().email}
           />
         );
       })}

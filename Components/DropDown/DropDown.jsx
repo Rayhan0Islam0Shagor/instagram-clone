@@ -20,7 +20,7 @@ export default function DropDown({ id }) {
   };
 
   return (
-    <div className="absolute top-0 right-0 mt-8">
+    <div className="absolute top-0 right-0 z-50 mt-8">
       <Transition
         as={Fragment}
         enter="transition ease-out duration-100"
@@ -76,25 +76,7 @@ function EditInactiveIcon(props) {
       <path
         d="M4 13V16H7L16 7L13 4L4 13Z"
         fill="#EDE9FE"
-        stroke="#A78BFA"
-        strokeWidth="2"
-      />
-    </svg>
-  );
-}
-
-function EditActiveIcon(props) {
-  return (
-    <svg
-      {...props}
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M4 13V16H7L16 7L13 4L4 13Z"
-        fill="#8B5CF6"
-        stroke="#C4B5FD"
+        stroke="#FFB830"
         strokeWidth="2"
       />
     </svg>
@@ -115,34 +97,11 @@ function DeleteInactiveIcon(props) {
         width="10"
         height="10"
         fill="#EDE9FE"
-        stroke="#A78BFA"
+        stroke="#FF2442"
         strokeWidth="2"
       />
-      <path d="M3 6H17" stroke="#A78BFA" strokeWidth="2" />
-      <path d="M8 6V4H12V6" stroke="#A78BFA" strokeWidth="2" />
-    </svg>
-  );
-}
-
-function DeleteActiveIcon(props) {
-  return (
-    <svg
-      {...props}
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <rect
-        x="5"
-        y="6"
-        width="10"
-        height="10"
-        fill="#8B5CF6"
-        stroke="#C4B5FD"
-        strokeWidth="2"
-      />
-      <path d="M3 6H17" stroke="#C4B5FD" strokeWidth="2" />
-      <path d="M8 6V4H12V6" stroke="#C4B5FD" strokeWidth="2" />
+      <path d="M3 6H17" stroke="#FF2442" strokeWidth="2" />
+      <path d="M8 6V4H12V6" stroke="#FF2442" strokeWidth="2" />
     </svg>
   );
 }

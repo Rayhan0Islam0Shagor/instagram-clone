@@ -30,7 +30,7 @@ import { db } from '../../config/firebaseConfig';
 import Moment from 'react-moment';
 import DropDown from '../DropDown/DropDown';
 
-const Post = ({ id, value, timestamp, image, avatar, name, caption }) => {
+const Post = ({ id, email, timestamp, image, avatar, name, caption }) => {
   const commentFieldRef = useRef(null);
   const { data: session } = useSession();
 
@@ -42,6 +42,8 @@ const Post = ({ id, value, timestamp, image, avatar, name, caption }) => {
 
   const [saved, setSaved] = useState([]);
   const [hasSaved, setHasSaved] = useState(false);
+
+  const [loading, setLoading] = useState(false);
 
   // emoji
   const [emojiPickerState, SetEmojiPicker] = useState(false);
@@ -160,11 +162,24 @@ const Post = ({ id, value, timestamp, image, avatar, name, caption }) => {
   return (
     <div className="bg-white my-7 border-rounded-sm dark:bg-gray-800 dark:text-gray-100">
       <div className="flex items-center p-5 dark:bg-gray-900">
-        <img
-          className="object-contain w-12 h-12 p-1 mr-3 border rounded-full cursor-pointer"
-          src={avatar}
-          alt={name}
-        />
+        <div className="relative overflow-hidden">
+          <img
+            alt={name}
+            src={avatar}
+            width="1200"
+            height="630"
+            className={`object-contain w-12 h-12 p-1 mr-3 border rounded-full cursor-pointer transition-opacity duration-200 ${
+              loading ? 'opacity-0' : 'opacity-100'
+            }`}
+            onLoad={() => {
+              setLoading(false);
+            }}
+          />
+          {loading && (
+            <div className="absolute top-0 left-0 w-full h-full bg-gray-100 animate-pulse dark:bg-gray-900" />
+          )}
+        </div>
+
         <div className="flex-1">
           <p className="font-bold cursor-pointer">{name}</p>
           <Moment className="text-xs" fromNow>
@@ -172,7 +187,7 @@ const Post = ({ id, value, timestamp, image, avatar, name, caption }) => {
           </Moment>
         </div>
 
-        {value ? (
+        {email === session?.user?.email ? (
           <Menu as="div" className="relative inline-block text-left">
             <div>
               <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
@@ -187,7 +202,24 @@ const Post = ({ id, value, timestamp, image, avatar, name, caption }) => {
         )}
       </div>
 
-      <img className="object-cover w-full" src={image} alt={caption} />
+      <div className="relative w-full overflow-hidden shadow-lg">
+        <img
+          alt={caption}
+          src={image}
+          width="1200"
+          height="630"
+          className={`w-full h-auto transition-opacity duration-200 ${
+            loading ? 'opacity-0' : 'opacity-100'
+          } `}
+          onLoad={() => {
+            setLoading(false);
+          }}
+          onDoubleClick={session && likePost}
+        />
+        {loading && (
+          <div className="absolute top-0 left-0 w-full h-full bg-gray-100 animate-pulse dark:bg-gray-900" />
+        )}
+      </div>
 
       {session && (
         <div className="flex justify-between px-4 pt-4 dark:bg-gray-900">
@@ -259,7 +291,7 @@ const Post = ({ id, value, timestamp, image, avatar, name, caption }) => {
             type="submit"
             disabled={comment.trim() === ''}
             onClick={sendComment}
-            className="px-3 py-1 font-semibold text-white bg-blue-600 rounded-full disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-600"
+            className="px-4 py-2 font-semibold text-white bg-blue-600 rounded-full disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-600 dark:rounded-lg"
           >
             Post
           </button>
